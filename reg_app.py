@@ -1,4 +1,5 @@
 import streamlit as st
+import numpy as np
 import pandas as pd
 import joblib
 from sklearn.preprocessing import LabelEncoder
@@ -114,9 +115,9 @@ def main():
     if st.button('Predict'):
         # Preprocess the input data
         input_data = preprocess_input(country, year, status, adult_mortality, alcohol, expenditure, hepatitis_b, measles, bmi, under_five_deaths, polio, total_expenditure, diphtheria, hiv_aids, gdp, population, thinness_1_19_years, income_composition, schooling)
-        
+        input1 = np.array(input_data.values)
         # Make prediction using the loaded model
-        prediction = model.predict(input_data)
+        prediction = model.predict(input1)
         
         # Display the prediction result
         st.success(f'The predicted life expectancy is {prediction[0]} years.')
