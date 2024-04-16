@@ -1,5 +1,4 @@
 import streamlit as st
-import numpy as np
 import pandas as pd
 import joblib
 from sklearn.preprocessing import LabelEncoder
@@ -8,13 +7,12 @@ from sklearn.preprocessing import LabelEncoder
 model = joblib.load('m1_model.pkl')
 
 # Load label encoders for categorical columns
-label_encoders = joblib.load('label_encoders.pkl')
-
+label_encoders = LabelEncoder()
 # Function to preprocess input data
 def preprocess_input(country, year, status, adult_mortality, alcohol, expenditure, hepatitis_b, measles, bmi, under_five_deaths, polio, total_expenditure, diphtheria, hiv_aids, gdp, population, thinness_1_19_years, income_composition, schooling):
     # Label encode categorical columns
-    country_encoded = label_encoders['Country'].transform([country])[0]
-    status_encoded = label_encoders['Status'].transform([status])[0]
+    country_encoded = label_encoders['Country'].fit_transform([country])
+    status_encoded = label_encoders['Status'].fit_transform([status])
     
     # Create a DataFrame from the input data
     data = pd.DataFrame({
@@ -115,7 +113,7 @@ def main():
     if st.button('Predict'):
         # Preprocess the input data
         input_data = preprocess_input(country, year, status, adult_mortality, alcohol, expenditure, hepatitis_b, measles, bmi, under_five_deaths, polio, total_expenditure, diphtheria, hiv_aids, gdp, population, thinness_1_19_years, income_composition, schooling)
-        input1 = np.array(input_data.values)
+        input1 = input_data.values
         # Make prediction using the loaded model
         prediction = model.predict(input1)
         
